@@ -5,14 +5,9 @@ terraform {
       version = "4.54.0"
     }
   }
-  backend "azurerm" {
-    resource_group_name  = "bhaweshnew"
-    storage_account_name = "bhaweshmishra"
-    container_name       = "bhaweshcontainer"
-    key                  = "bhawesh.tfstate"
-  }
-
 }
+
+
 
 provider "azurerm" {
   features {}
