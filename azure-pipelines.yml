@@ -1,0 +1,43 @@
+
+trigger: none
+
+pool: bhaweshpool
+  
+
+steps:
+- task: PowerShell@2
+  inputs:
+    targetType: 'inline'
+    script: 'Write-Host "Hello World"'
+
+- task: TerraformInstaller@1
+  inputs:
+    terraformVersion: 'latest'
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+    backendAzureRmUseEntraIdForAuthentication: false
+    backendServiceArm: 'bhaweshscp'
+    backendAzureRmStorageAccountName: 'bhaweshmishra'
+    backendAzureRmContainerName: 'bhaweshcontainer'
+    backendAzureRmKey: 'bhawesh.tfstate'
+
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+    environmentServiceNameAzureRM: 'bhaweshscp'
+
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+    environmentServiceNameAzureRM: 'bhaweshscp'
+    commandOptions: '-auto-approve'
