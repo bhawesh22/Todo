@@ -19,9 +19,9 @@ steps:
     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
     backendServiceArm: 'bhaweshscp'
     backendAzureRmOverrideSubscriptionID: '18bbb1ca-f79e-49b4-8669-5a1208da00f7'
-    backendAzureRmStorageAccountName: 'bhaweshmishra'
-    backendAzureRmContainerName: 'bhaweshcontainer'
-    backendAzureRmKey: 'bhawesh.tfstate'
+    # backendAzureRmStorageAccountName: 'bhaweshmishra'
+    # backendAzureRmContainerName: 'bhaweshcontainer'
+    # backendAzureRmKey: 'bhawesh.tfstate'
 
 
 
