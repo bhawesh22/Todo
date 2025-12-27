@@ -20,3 +20,11 @@ steps:
     backendAzureRmStorageAccountName: 'bhaweshmishra'
     backendAzureRmContainerName: 'bhaweshcontainer'
     backendAzureRmKey: 'bhawesh.tfstate'
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+    environmentServiceNameAzureRM: 'Bhawesh-SP'
+    environmentAzureRmOverrideSubscriptionID: '18bbb1ca-f79e-49b4-8669-5a1208da00f7'
