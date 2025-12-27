@@ -27,8 +27,7 @@ stages:
   jobs:
     - job: TerraformInitPlan
       displayName: "Terraform Init and Plan"
-      pool:
-        vmImage: 'ubuntu-latest'  
+
       steps:
         # Install Terraform
         - task: TerraformInstaller@1
