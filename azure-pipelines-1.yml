@@ -59,9 +59,10 @@ stages:
             workingDirectory: '$(workingDirectory)'
             environmentServiceNameAzureRM: 'Bhawesh-SP'
             environmentAzureRmOverrideSubscriptionID: '$(azureSubscriptionId)'
+            additionalArguments: '-out=$(workingDirectory)/tfplan'
 
         # Publish plan artifact for next stage
-        - publish: '$(System.DefaultWorkingDirectory)/environments/dev/tfplan'
+        - publish: '$(workingDirectory)/tfplan'
           artifact: tfplan
 
 
