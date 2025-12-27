@@ -59,43 +59,43 @@ stages:
             workingDirectory: '$(workingDirectory)'
             environmentServiceNameAzureRM: 'Bhawesh-SP'
             environmentAzureRmOverrideSubscriptionID: '$(azureSubscriptionId)'
-            additionalArguments: '-out=$(workingDirectory)/tfplan'
+            # additionalArguments: '-out=$(workingDirectory)/tfplan'
 
-        # Publish plan artifact for next stage
-        - publish: '$(workingDirectory)/tfplan'
-          artifact: tfplan
+        # # Publish plan artifact for next stage
+        # - publish: '$(workingDirectory)/tfplan'
+        #   artifact: tfplan
 
 
-# # Stage 2: Terraform Apply
+# Stage 2: Terraform Apply
 
-# - stage: InfraApply
-#   displayName: "Terraform Apply"
-#   dependsOn: InfraExecution
-#   condition: succeeded() 
-#   jobs:
-#     - job: TerraformApply
-#       displayName: "Terraform Apply"
-#       pool:
-#         vmImage: 'ubuntu-latest'
-#       steps:
-#         # Install Terraform
-#         - task: TerraformInstaller@1
-#           displayName: "Install Terraform"
-#           inputs:
-#             terraformVersion: 'latest'
+- stage: InfraApply
+  displayName: "Terraform Apply"
+  dependsOn: InfraExecution
+  condition: succeeded() 
+  jobs:
+    - job: TerraformApply
+      displayName: "Terraform Apply"
+      pool:
+        name: 'bhaweshpool'
+      steps:
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: 'Bhawesh-SP'
+          backendAzureRmUseEntraIdForAuthentication: false
+          workingDirectory: '$(workingDirectory)'
+          backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
+          backendAzureRmStorageAccountName: 'bhaweshmishra'
+          backendAzureRmContainerName: 'bhaweshcontainer'
+          backendAzureRmKey: 'bhawesh.tfstate'
 
-#         # Download plan artifact
-#         - download: current
-#           artifact: tfplan
-#           displayPath: '$(System.DefaultWorkingDirectory)/tfplan'
+        # Terraform Apply
 
-#         # Terraform Apply
-#         - task: TerraformTask@5
-#           displayName: "Terraform Apply"
-#           inputs:
-#             provider: 'azurerm'
-#             command: 'apply'
-#             workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-#             commandOptions: '--auto-approve'
-#             environmentServiceNameAzureRM: 'Bhawesh-SP'
-#             environmentAzureRmOverrideSubscriptionID: '18bbb1ca-f79e-49b4-8669-5a1208da00f7'
+
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'apply'
+          commandOptions: '--auto-approve'
+          environmentServiceNameAzureRM: 'Bhawesh-SP'
