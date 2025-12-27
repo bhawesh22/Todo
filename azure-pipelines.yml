@@ -6,10 +6,6 @@ pool: bhaweshpool
   
 
 steps:
-- task: PowerShell@2
-  inputs:
-    targetType: 'inline'
-    script: 'Write-Host "Hello World"'
 
 - task: TerraformInstaller@1
   inputs:
@@ -28,18 +24,18 @@ steps:
     backendAzureRmOverrideSubscriptionID: "18bbb1ca-f79e-49b4-8669-5a1208da00f7"
 
 
-- task: TerraformTask@5
-  inputs:
-    provider: 'azurerm'
-    command: 'plan'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-    environmentServiceNameAzureRM: 'bhaweshscp'
+# - task: TerraformTask@5
+#   inputs:
+#     provider: 'azurerm'
+#     command: 'plan'
+#     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+#     environmentServiceNameAzureRM: 'bhaweshscp'
 
 
-- task: TerraformTask@5
-  inputs:
-    provider: 'azurerm'
-    command: 'apply'
-    workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
-    environmentServiceNameAzureRM: 'bhaweshscp'
-    commandOptions: '-auto-approve'
+# - task: TerraformTask@5
+#   inputs:
+#     provider: 'azurerm'
+#     command: 'apply'
+#     workingDirectory: '$(System.DefaultWorkingDirectory)/environments/dev'
+#     environmentServiceNameAzureRM: 'bhaweshscp'
+#     commandOptions: '-auto-approve'
