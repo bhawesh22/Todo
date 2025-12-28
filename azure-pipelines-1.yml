@@ -74,6 +74,15 @@ stages:
      - task: TerraformTask@5
        inputs:
          provider: 'azurerm'
+         command: 'init'
+         backendServiceArm: 'Bhawesh-SP'
+         backendAzureRmResourceGroupName: 'bhawehnew'
+         backendAzureRmStorageAccountName: 'bhaweshmishra'
+         backendAzureRmContainerName: 'bhaweshcontainer'
+         backendAzureRmKey: 'bhawesh.tfstate'
+     - task: TerraformTask@5
+       inputs:
+         provider: 'azurerm'
          command: 'apply'
          workingDirectory: '$(workingDirectory)'
          commandOptions: '--auto-approve'
