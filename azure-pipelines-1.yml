@@ -84,3 +84,11 @@ stages:
             workingDirectory: '$(workingDirectory)'
             commandOptions: '--auto-approve'
             environmentServiceNameAzureRM: 'Bhawesh-SP'
+
+        - task: TerraformTask@5
+          displayName: "Terraform destroy"
+          inputs:
+           provider: 'azurerm'
+           command: 'destroy'
+           workingDirectory: '$(workingDirectory)'
+           environmentServiceNameAzureRM: 'Bhawesh-SP'
