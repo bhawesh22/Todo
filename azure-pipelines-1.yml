@@ -75,6 +75,7 @@ stages:
        inputs:
          provider: 'azurerm'
          command: 'apply'
+         workingDirectory: '$(workingDirectory)'
          commandOptions: '--auto-approve'
          environmentServiceNameAzureRM: 'Bhawesh-SP'
 
