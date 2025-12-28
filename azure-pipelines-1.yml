@@ -59,43 +59,23 @@ stages:
             workingDirectory: '$(workingDirectory)'
             environmentServiceNameAzureRM: 'Bhawesh-SP'
             environmentAzureRmOverrideSubscriptionID: '$(azureSubscriptionId)'
-            # additionalArguments: '-out=$(workingDirectory)/tfplan'
-
-        # # Publish plan artifact for next stage
-        # - publish: '$(workingDirectory)/tfplan'
-        #   artifact: tfplan
 
 
-# Stage 2: Terraform Apply
 
-- stage: InfraApply
-  displayName: "Terraform Apply"
+- stage: Terraform_Apply 
+  displayName:  "Terraform Apply"
+  pool:
+   name: bhaweshpool
   dependsOn: InfraExecution
-  condition: succeeded() 
+  condition: succeeded()
   jobs:
-    - job: TerraformApply
-      displayName: "Terraform Apply"
-      pool:
-        name: 'bhaweshpool'
-      steps:
-      - task: TerraformTask@5
-        inputs:
-          provider: 'azurerm'
-          command: 'init'
-          backendServiceArm: 'Bhawesh-SP'
-          backendAzureRmUseEntraIdForAuthentication: false
-          workingDirectory: '$(workingDirectory)'
-          backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
-          backendAzureRmStorageAccountName: 'bhaweshmishra'
-          backendAzureRmContainerName: 'bhaweshcontainer'
-          backendAzureRmKey: 'bhawesh.tfstate'
+   - job: TerraformApply
+     steps:
+     - task: TerraformTask@5
+       inputs:
+         provider: 'azurerm'
+         command: 'apply'
+         commandOptions: '--auto-approve'
+         environmentServiceNameAzureRM: 'Bhawesh-SP'
 
-        # Terraform Apply
-
-
-      - task: TerraformTask@5
-        inputs:
-          provider: 'azurerm'
-          command: 'apply'
-          commandOptions: '--auto-approve'
-          environmentServiceNameAzureRM: 'Bhawesh-SP'
+    
