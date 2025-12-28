@@ -22,7 +22,7 @@ rgs = {
 stgs = {
 
   stg1 = {
-    name                     = "devstoragejawahar"
+    name                     = "bhaweshstorage"
     resource_group_name      = "rg-bhawesh-dev"
     location                 = "Central India"
     account_tier             = "Standard"
@@ -234,7 +234,7 @@ vms = {
     size                            = "Standard_D2s_v3"
     disable_password_authentication = false
     nic_name                        = "nic-frontend"
-    kv_name                         = "kv-todo-appsjp"
+    kv_name                         = "kv-todo-appbm"
     vm_username_secret_name         = "vm-adminusername"
     vm_password_secret_name         = "vm-adminpassword"
     provision_vm_agent              = true
@@ -270,7 +270,7 @@ vms = {
     size                            = "Standard_D2s_v3"
     disable_password_authentication = false
     nic_name                        = "nic-backend"
-    kv_name                         = "kv-todo-appsjp"
+    kv_name                         = "kv-todo-appbm"
     vm_username_secret_name         = "vm-adminusername"
     vm_password_secret_name         = "vm-adminpassword"
     provision_vm_agent              = true
@@ -301,7 +301,7 @@ vms = {
 
 key_vaults = {
   kv-devjp = {
-    name                            = "kv-todo-appsjp"
+    name                            = "kv-todo-appbm"
     resource_group_name             = "rg-bhawesh-dev"
     location                        = "Central India"
     sku_name                        = "standard"
@@ -334,26 +334,26 @@ key_vaults = {
 
 kv_secrets = {
   secret1 = {
-    kv_name      = "kv-todo-appsjp"
+    kv_name      = "kv-todo-appbm"
     rg_name      = "rg-bhawesh-dev"
     secret_name  = "vm-adminusername"
     secret_value = "azureuser"
 
   },
   secret2 = {
-    kv_name      = "kv-todo-appsjp"
+    kv_name      = "kv-todo-appbm"
     rg_name      = "rg-bhawesh-dev"
     secret_name  = "vm-adminpassword"
     secret_value = "P@ssword123!"
   },
   secret3 = {
-    kv_name      = "kv-todo-appsjp"
+    kv_name      = "kv-todo-appbm"
     rg_name      = "rg-bhawesh-dev"
     secret_name  = "sql-adminusername"
     secret_value = "sqladmintodo"
   },
   secret4 = {
-    kv_name      = "kv-todo-appsjp"
+    kv_name      = "kv-todo-appbm"
     rg_name      = "rg-bhawesh-dev"
     secret_name  = "sql-adminpassword"
     secret_value = "P@ssword123!"
@@ -362,11 +362,11 @@ kv_secrets = {
 
 sql_servers = {
   sql1 = {
-    name                                     = "jawaharapp-dev-db-server"
+    name                                     = "bhaweshapp-dev-db-server"
     resource_group_name                      = "rg-bhawesh-dev"
     location                                 = "Central India"
     version                                  = "12.0"
-    kv_name                                  = "kv-todo-appsjp"
+    kv_name                                  = "kv-todo-appbm"
     sql_username_secret_name                 = "sql-adminusername"
     sql_password_secret_name                 = "sql-adminpassword"
     connection_policy                        = "Default"
@@ -392,8 +392,8 @@ sql_servers = {
 
 sql_databases = {
   sql_db1 = {
-    name                = "todo-databasejp"
-    server_name         = "jawaharapp-dev-db-server"
+    name                = "todo-databasebm"
+    server_name         = "bhaweshapp-dev-db-server"
     resource_group_name = "rg-bhawesh-dev"
     location            = "Central India"
     sku_name            = "S0"
