@@ -82,7 +82,7 @@ stages:
         INFRACOST_API_KEY: $(INFRACOST_API_KEY)  
       continueOnError: true     
 # Stage 3: Terraform Plan
-- stage: terraform_plan
+- stage: terraform_initplan
   displayName: Terraform Plan
   dependsOn: terraform_infracost
   jobs:
@@ -91,8 +91,19 @@ stages:
       - task: TerraformTask@5
         inputs:
           provider: 'azurerm'
+          command: 'init'
+          backendServiceArm: '$(backendServiceArm)'
+          workingDirectory: '$(workingDirectory)'
+          backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
+          backendAzureRmStorageAccountName: '$(storageAccountName)'
+          backendAzureRmContainerName: '$(backendAzureRmContainerName)'
+          backendAzureRmKey: '$(backendAzureRmKey)'
+
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
           command: 'plan'
-          environmentServiceNameAzureRM: 'Bhawesh-SP'
+          environmentServiceNameAzureRM: '$(backendServiceArm)'
           workingDirectory: '$(workingDirectory)'
           backendAzureRmOverrideSubscriptionID:  '$(azureSubscriptionId)'
   
