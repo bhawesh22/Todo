@@ -44,18 +44,7 @@ stages:
             backendAzureRmStorageAccountName: '$(storageAccountName)'
             backendAzureRmContainerName: '$(backendAzureRmContainerName)'
             backendAzureRmKey: '$(backendAzureRmKey)'
- 
-             
 
-
-        - task: TerraformTask@5
-          displayName: "Terraform Plan"
-          inputs:
-            provider: 'azurerm'
-            command: 'plan'
-            workingDirectory: '$(workingDirectory)'
-            environmentServiceNameAzureRM: 'Bhawesh-SP'
-            environmentAzureRmOverrideSubscriptionID: '$(azureSubscriptionId)'
     - job: tfsec
       displayName: tfsec
       steps:
@@ -78,7 +67,7 @@ stages:
           workingDirectory: '$(workingDirectory)'
 
 # Stage 2: Terraform Infracost
-- stage : terraform_infracost
+- stage: terraform_infracost
   displayName: Cost & Impact Assessment Stage
   dependsOn: InfraExecution
   jobs:
@@ -89,7 +78,20 @@ stages:
         targetType: 'inline'
         script: 'infracost breakdown --path=.'
         workingDirectory: '$(workingDirectory)'
-
+# Stage 3: Terraform Plan
+- stage: terraform_plan
+  displayName: Terraform Plan
+  dependsOn: terraform_infracost
+  jobs:
+    - job: terraformplan
+      steps:
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'plan'
+          environmentServiceNameAzureRM: 'Bhawesh-SP'
+          workingDirectory: '$(workingDirectory)'
+          backendAzureRmOverrideSubscriptionID:  '$(azureSubscriptionId)'
   
 # Stage 2: Terraform Apply
 # - stage: Terraform_Apply
