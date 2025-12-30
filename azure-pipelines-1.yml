@@ -107,40 +107,47 @@ stages:
           workingDirectory: '$(workingDirectory)'
           backendAzureRmOverrideSubscriptionID:  '$(azureSubscriptionId)'
   
-# Stage 2: Terraform Apply
-# - stage: Terraform_Apply
-#   displayName: "Terraform Apply"
-#   dependsOn: InfraExecution
-#   condition: succeeded()
-#   jobs:
-#     - job: TerraformApply
-#       steps:
+#  Stage 4:Terraform Apply
+- stage: Terraform_Apply
+  displayName: "Terraform Apply"
+  dependsOn: InfraExecution
+  condition: succeeded()
+  jobs:
+    - job: TerraformApply
+      steps:
 
-#         - task: TerraformTask@5
-#           displayName: "Terraform Init (Apply)"
-#           inputs:
-#             provider: 'azurerm'
-#             command: 'init'
-#             workingDirectory: '$(workingDirectory)'
-#             backendServiceArm: '$(backendServiceArm)'
-#             backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
-#             backendAzureRmStorageAccountName: '$(storageAccountName)'
-#             backendAzureRmContainerName: '$(backendAzureRmContainerName)'
-#             backendAzureRmKey: '$(backendAzureRmKey)'
+        - task: TerraformTask@5
+          displayName: "Terraform Init (Apply)"
+          inputs:
+            provider: 'azurerm'
+            command: 'init'
+            workingDirectory: '$(workingDirectory)'
+            backendServiceArm: '$(backendServiceArm)'
+            backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
+            backendAzureRmStorageAccountName: '$(storageAccountName)'
+            backendAzureRmContainerName: '$(backendAzureRmContainerName)'
+            backendAzureRmKey: '$(backendAzureRmKey)'
 
-        # - task: TerraformTask@5
-        #   displayName: "Terraform Apply"
-        #   inputs:
-        #     provider: 'azurerm'
-        #     command: 'apply'
-        #     workingDirectory: '$(workingDirectory)'
-        #     commandOptions: '--auto-approve'
-        #     environmentServiceNameAzureRM: 'Bhawesh-SP'
+        - task: TerraformTask@5
+          displayName: "Terraform Apply"
+          inputs:
+            provider: 'azurerm'
+            command: 'apply'
+            workingDirectory: '$(workingDirectory)'
+            commandOptions: '--auto-approve'
+            environmentServiceNameAzureRM: 'Bhawesh-SP'
 
-        # - task: TerraformTask@5
-        #   displayName: "Terraform destroy"
-        #   inputs:
-        #    provider: 'azurerm'
-        #    command: 'destroy'
-        #    workingDirectory: '$(workingDirectory)'
-        #    environmentServiceNameAzureRM: 'Bhawesh-SP'
+# Stage 5 : Terraform Destroy
+- stage: terraform_destroy
+  displayName: terraform destroy
+  
+  jobs:
+    - job: terrform_destroy
+      steps:
+      - task: TerraformTask@5
+        inputs:
+          provider: 'azurerm'
+          command: 'destroy'
+          commandOptions: '--auto-approve'
+          environmentServiceNameAzureRM: 'Bhawesh-SP'
+          workingDirectory: '$(workingDirectory)'
