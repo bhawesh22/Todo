@@ -78,6 +78,9 @@ stages:
         targetType: 'inline'
         script: 'infracost breakdown --path=.'
         workingDirectory: '$(workingDirectory)'
+      env:
+        INFRACOST_API_KEY: $(INFRACOST_API_KEY)  
+      continueOnError: true     
 # Stage 3: Terraform Plan
 - stage: terraform_plan
   displayName: Terraform Plan
