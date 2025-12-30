@@ -44,6 +44,9 @@ stages:
             backendAzureRmStorageAccountName: '$(storageAccountName)'
             backendAzureRmContainerName: '$(backendAzureRmContainerName)'
             backendAzureRmKey: '$(backendAzureRmKey)'
+ 
+             
+
 
         - task: TerraformTask@5
           displayName: "Terraform Plan"
@@ -53,42 +56,75 @@ stages:
             workingDirectory: '$(workingDirectory)'
             environmentServiceNameAzureRM: 'Bhawesh-SP'
             environmentAzureRmOverrideSubscriptionID: '$(azureSubscriptionId)'
-
-
-# Stage 2: Terraform Apply
-- stage: Terraform_Apply
-  displayName: "Terraform Apply"
-  dependsOn: InfraExecution
-  condition: succeeded()
-  jobs:
-    - job: TerraformApply
+    - job: tfsec
+      displayName: tfsec
       steps:
+      - task: tfsec@1
+        inputs:
+          version: 'v1.26.0'
+          workingDirectory: '$(workingDirectory)'
+    - job: tflint
+      displayName: terraform lint
+      dependsOn: tfsec
+      steps:
+      - task: PowerShell@2
+        inputs:
+          targetType: 'inline'
+          script: |
+            winget install TerraformLinters.tflint     
+                      ls   
+                      tflint
+          continueOnError: true 
+          workingDirectory: '$(workingDirectory)'
 
-        - task: TerraformTask@5
-          displayName: "Terraform Init (Apply)"
-          inputs:
-            provider: 'azurerm'
-            command: 'init'
-            workingDirectory: '$(workingDirectory)'
-            backendServiceArm: '$(backendServiceArm)'
-            backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
-            backendAzureRmStorageAccountName: '$(storageAccountName)'
-            backendAzureRmContainerName: '$(backendAzureRmContainerName)'
-            backendAzureRmKey: '$(backendAzureRmKey)'
+# Stage 2: Terraform Infracost
+- stage : terraform_infracost
+  displayName: Cost & Impact Assessment Stage
+  dependsOn: InfraExecution
+  jobs:
+  - job: terraforminfracost
+    steps:
+    - task: PowerShell@2
+      inputs:
+        targetType: 'inline'
+        script: 'infracost breakdown --path=.'
+        workingDirectory: '$(workingDirectory)'
 
-        - task: TerraformTask@5
-          displayName: "Terraform Apply"
-          inputs:
-            provider: 'azurerm'
-            command: 'apply'
-            workingDirectory: '$(workingDirectory)'
-            commandOptions: '--auto-approve'
-            environmentServiceNameAzureRM: 'Bhawesh-SP'
+  
+# Stage 2: Terraform Apply
+# - stage: Terraform_Apply
+#   displayName: "Terraform Apply"
+#   dependsOn: InfraExecution
+#   condition: succeeded()
+#   jobs:
+#     - job: TerraformApply
+#       steps:
 
-        - task: TerraformTask@5
-          displayName: "Terraform destroy"
-          inputs:
-           provider: 'azurerm'
-           command: 'destroy'
-           workingDirectory: '$(workingDirectory)'
-           environmentServiceNameAzureRM: 'Bhawesh-SP'
+#         - task: TerraformTask@5
+#           displayName: "Terraform Init (Apply)"
+#           inputs:
+#             provider: 'azurerm'
+#             command: 'init'
+#             workingDirectory: '$(workingDirectory)'
+#             backendServiceArm: '$(backendServiceArm)'
+#             backendAzureRmResourceGroupName: '$(backendAzureRmResourceGroupName)'
+#             backendAzureRmStorageAccountName: '$(storageAccountName)'
+#             backendAzureRmContainerName: '$(backendAzureRmContainerName)'
+#             backendAzureRmKey: '$(backendAzureRmKey)'
+
+        # - task: TerraformTask@5
+        #   displayName: "Terraform Apply"
+        #   inputs:
+        #     provider: 'azurerm'
+        #     command: 'apply'
+        #     workingDirectory: '$(workingDirectory)'
+        #     commandOptions: '--auto-approve'
+        #     environmentServiceNameAzureRM: 'Bhawesh-SP'
+
+        # - task: TerraformTask@5
+        #   displayName: "Terraform destroy"
+        #   inputs:
+        #    provider: 'azurerm'
+        #    command: 'destroy'
+        #    workingDirectory: '$(workingDirectory)'
+        #    environmentServiceNameAzureRM: 'Bhawesh-SP'
