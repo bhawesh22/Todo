@@ -8,6 +8,7 @@ variables:
   backendAzureRmKey: 'bhawesh.tfstate'
   environment: 'dev'
   workingDirectory: '$(System.DefaultWorkingDirectory)/environments/$(environment)'
+  INFRACOST_API_KEY: ico-mWw23dRXsTRo6XLQud97J8jZUkRyqlKH
 
 
 trigger:
