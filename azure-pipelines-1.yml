@@ -104,6 +104,7 @@ stages:
         targetType: 'inline'
         script: 'infracost breakdown --path=.'
         workingDirectory: '$(workingDirectory)'
+      
       env:
         INFRACOST_API_KEY: $(INFRACOST_API_KEY)  
       continueOnError: true      
